@@ -1,0 +1,28 @@
+##########################################################
+##  Qubes tunnel service
+##
+##  See qubes-tunnel.service.d/00_example.conf
+##  for example customization.
+
+[Unit]
+Description=Tunnel service for Qubes proxyVM
+ConditionPathExists=!/var/run/qubes/this-is-templatevm
+ConditionPathExists=/rw/config/qtunnel
+ConditionPathExistsGlob=/var/run/qubes-service/qubes-tunnel*
+After=network.target qubes-firewall.service rw.mount
+
+[Service]
+Group=qtunnel
+Restart=always
+RestartSec=10
+TimeoutStopSec=2
+
+ExecStartPre=/usr/lib/qubes/qtunnel-setup --pre-start
+ExecStart=/usr/sbin/openvpn --cd /rw/config/qtunnel/ --config qtunnel.conf \
+--group qtunnel --mlock --script-security 2 \
+--up "/usr/lib/qubes/qtunnel-connect up" --down "/usr/lib/qubes/qtunnel-connect down" \
+--auth-user-pass /tmp/tunneluserpwd.txt
+
+[Install]
+WantedBy=multi-user.target
+

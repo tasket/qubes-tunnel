@@ -26,24 +26,23 @@ correct_ips() {
 }
 
 # Set firewall restriction policy
-iptables -P INPUT DROP
-iptables -P FORWARD DROP
-iptables -P OUTPUT DROP
-
-ip6tables -P INPUT DROP
-ip6tables -P FORWARD DROP
-ip6tables -P OUTPUT DROP
 
 # Stop all leaks between downstream (vif+) and upstream (Internet eth0):
+iptables -P FORWARD DROP
 iptables -I FORWARD -o eth0 -j DROP
 iptables -I FORWARD -i eth0 -j DROP
 
+ip6tables -P FORWARD DROP
 ip6tables -I FORWARD -o eth0 -j DROP
 ip6tables -I FORWARD -i eth0 -j DROP
 
 # Block INPUT from tunnel(s):
+iptables -P INPUT DROP
 iptables -I INPUT -i tun+ -j DROP
+
+ip6tables -P INPUT DROP
 ip6tables -I INPUT -i tun+ -j DROP
+
 # Allow established v6 traffic (v4 rule already present):
 #iptables -A INPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ip6tables -A INPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
@@ -60,14 +59,15 @@ iptables -L QBS-FORWARD || correct_ips
 ###-------------------------------------------------------------------###
 # This section executed only if plain qubes-tunnel service is active:
 [ -e /var/run/qubes-service/qubes-tunnel ] || exit 0
-## TEST THIS!
 
 # Prevent accidental communications from within VPN VM to net;
 # The gid-owner rule requires net programs be run with group ID 'qtunnel'
 # to allow outbound traffic.
+iptables -P OUTPUT DROP
 iptables -I OUTPUT -o lo -j ACCEPT
 iptables -I OUTPUT -p all -o eth0 -m owner --gid-owner qtunnel -j ACCEPT
 
+ip6tables -P OUTPUT DROP
 ip6tables -I OUTPUT -o lo -j ACCEPT
 ip6tables -I OUTPUT -p all -o eth0 -m owner --gid-owner qtunnel -j ACCEPT
 

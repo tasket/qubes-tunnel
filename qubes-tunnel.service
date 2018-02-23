@@ -17,11 +17,16 @@ Restart=always
 RestartSec=10
 TimeoutStopSec=2
 
+ExecStartPre=/usr/lib/qubes/qtunnel-setup --check-firewall
 ExecStartPre=/usr/lib/qubes/qtunnel-setup --pre-start
+
 ExecStart=/usr/sbin/openvpn --cd /rw/config/qtunnel/ --config qtunnel.conf \
 --group qtunnel --mlock --script-security 2 \
 --up "/usr/lib/qubes/qtunnel-connect up" --down "/usr/lib/qubes/qtunnel-connect down" \
 --auth-user-pass /tmp/tunneluserpwd.txt
+
+ExecStartPost=/usr/lib/qubes/qtunnel-setup --post-start
+ExecStopPost=/usr/lib/qubes/qtunnel-setup --post-stop
 
 [Install]
 WantedBy=multi-user.target

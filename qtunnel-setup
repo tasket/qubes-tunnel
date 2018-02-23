@@ -55,7 +55,16 @@ case "$1" in
     fi
 ;;
 
+--check-firewall)
+    if ! iptables -C FORWARD -o eth0 -j DROP \
+    || ! iptables -C FORWARD -i eth0 -j DROP ; then
+        echo "Error: Firewall rule(s) not enabled!"
+        exit 1
+    fi
+;;
+
 --pre-start)
+# Check for login file and prompt if necessary.
     if [ ! -f $uppath ]; then
         if [ ! -f /tmp/qtunnel-askpass ]; then
             systemd-run --unit=qtunnel-askpass -E DISPLAY=:0 sh -c \
@@ -65,8 +74,8 @@ case "$1" in
     elif [ ! -f $tmppath ]; then
         cp -a $uppath $tmppath.tmp
         mv $tmppath.tmp $tmppath
-        sync; sleep 2s
-        su - -c 'notify-send "$(hostname): Ready to start link."' user
+        sync
+	su - -c 'notify-send "$(hostname): Ready to start link."' user
     fi
 ;;
 
@@ -74,5 +83,19 @@ case "$1" in
     touch /tmp/qtunnel-askpass
     do_userpass
 ;;
+
+--post-start)
+    echo "START-ing network forwarding!"
+    echo '1' > /proc/sys/net/ipv4/ip_forward
+# '0' appears to be default setting for ipv6
+#    echo '1' > /proc/sys/net/ipv6/conf/all/forwarding
+;;
+
+--post-stop)
+    echo "STOP-ing network forwarding!"
+    echo '0' > /proc/sys/net/ipv4/ip_forward
+    echo '0' > /proc/sys/net/ipv6/conf/all/forwarding
+;;
+
 esac
 

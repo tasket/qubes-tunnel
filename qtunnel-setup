@@ -55,6 +55,16 @@ case "$1" in
     fi
 ;;
 
+--config-nm)
+    if is_proxyvm ; then
+        firewall_link /usr/lib/qubes
+        echo "Done!"
+    else
+        echo "Error: Not a proxyVM. Please check instructions."
+        exit 1
+    fi
+;;
+
 --check-firewall)
     if ! iptables -C FORWARD -o eth0 -j DROP \
     || ! iptables -C FORWARD -i eth0 -j DROP ; then

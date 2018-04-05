@@ -32,7 +32,7 @@ firewall_link () {
         ln -s -f $1/tunnel-restrict-firewall \
     /rw/config/qubes-firewall.d/90_tunnel-restrict
     else
-        ln -s -f $1/tunnel-restrict-firewall \
+        ln -s -f -b $1/tunnel-restrict-firewall \
     /rw/config/qubes-firewall-user-script
     fi
 }

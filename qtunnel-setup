@@ -1,14 +1,17 @@
-#!/bin/bash
+#!/bin/sh
 export PATH="$PATH:/usr/sbin:/sbin:/bin"
 [ `id -u` -eq 0 ] || exit 1
-. /usr/lib/qubes/init/functions
 
 qtunpath=/rw/config/qtunnel
-uppath=$qtunpath/tunneluserpwd.txt
-tmppath="/tmp/"`basename $uppath`
-
+upfile=tunneluserpwd.txt
+tmppath=/tmp/$upfile
 
 do_userpass () {
+    bash /usr/lib/qubes/qtunnel-setup --userpass-bash
+}
+
+# Need bash for password prompt
+do_userpass_bash () {
     echo
     read -p  "VPN/tunnel username: " username
     read -s -p "VPN/tunnel password: " upassword
@@ -18,8 +21,8 @@ do_userpass () {
     echo "$upassword" >>$tmppath.tmp
     chmod 600 $tmppath.tmp
     mv $tmppath.tmp $tmppath
-    cp -a $tmppath $uppath
-    echo -e "\nLogin info saved to $uppath"
+    cp -a $tmppath $qtunpath/$upfile
+    echo -e "\nLogin info saved to $qtunpath/$upfile"
     sleep 1s
     echo
 }
@@ -40,7 +43,45 @@ firewall_link () {
 
 case "$1" in
 
+--pre-start)
+# Check for login file and prompt if necessary.
+    if [ ! -f $qtunpath/$upfile ]; then
+        if [ ! -f /tmp/qtunnel-askpass ]; then
+            systemd-run --unit=qtunnel-askpass -E DISPLAY=:0 sh -c \
+            'sleep 2s; /usr/bin/xterm \
+            -T "Tunnel Login" -e /usr/lib/qubes/qtunnel-setup --xterm'
+        fi
+    elif [ ! -f $tmppath ]; then
+        cp -a $qtunpath/$upfile $tmppath.tmp
+        mv $tmppath.tmp $tmppath
+        sync
+	su - -c 'notify-send "$(hostname): Ready to start link."' user
+    fi
+;;
+
+--post-start)
+    echo "START-ing network forwarding!"
+    echo '1' > /proc/sys/net/ipv4/ip_forward
+# '0' appears to be default setting for ipv6
+#    echo '1' > /proc/sys/net/ipv6/conf/all/forwarding
+;;
+
+--check-firewall)
+    if ! iptables -C FORWARD -o eth0 -j DROP \
+    || ! iptables -C FORWARD -i eth0 -j DROP ; then
+        echo "Error: Firewall rule(s) not enabled!"
+        exit 1
+    fi
+;;
+
+--post-stop)
+    echo "STOP-ing network forwarding!"
+    echo '0' > /proc/sys/net/ipv4/ip_forward
+    echo '0' > /proc/sys/net/ipv6/conf/all/forwarding
+;;
+
 --config)
+    . /usr/lib/qubes/init/functions
     if is_proxyvm ; then
         mkdir -p $qtunpath
         firewall_link /usr/lib/qubes
@@ -56,6 +97,7 @@ case "$1" in
 ;;
 
 --config-nm)
+    . /usr/lib/qubes/init/functions
     if is_proxyvm ; then
         firewall_link /usr/lib/qubes
         echo "Done!"
@@ -65,46 +107,13 @@ case "$1" in
     fi
 ;;
 
---check-firewall)
-    if ! iptables -C FORWARD -o eth0 -j DROP \
-    || ! iptables -C FORWARD -i eth0 -j DROP ; then
-        echo "Error: Firewall rule(s) not enabled!"
-        exit 1
-    fi
-;;
-
---pre-start)
-# Check for login file and prompt if necessary.
-    if [ ! -f $uppath ]; then
-        if [ ! -f /tmp/qtunnel-askpass ]; then
-            systemd-run --unit=qtunnel-askpass -E DISPLAY=:0 sh -c \
-            'sleep 2s; /usr/bin/xterm \
-            -T "Tunnel Login" -e /usr/lib/qubes/qtunnel-setup --xterm'
-        fi
-    elif [ ! -f $tmppath ]; then
-        cp -a $uppath $tmppath.tmp
-        mv $tmppath.tmp $tmppath
-        sync
-	su - -c 'notify-send "$(hostname): Ready to start link."' user
-    fi
-;;
-
 --xterm)
     touch /tmp/qtunnel-askpass
     do_userpass
 ;;
 
---post-start)
-    echo "START-ing network forwarding!"
-    echo '1' > /proc/sys/net/ipv4/ip_forward
-# '0' appears to be default setting for ipv6
-#    echo '1' > /proc/sys/net/ipv6/conf/all/forwarding
-;;
-
---post-stop)
-    echo "STOP-ing network forwarding!"
-    echo '0' > /proc/sys/net/ipv4/ip_forward
-    echo '0' > /proc/sys/net/ipv6/conf/all/forwarding
+--userpass-bash)
+    do_userpass_bash
 ;;
 
 esac

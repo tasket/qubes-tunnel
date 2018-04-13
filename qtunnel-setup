@@ -67,11 +67,16 @@ case "$1" in
 ;;
 
 --check-firewall)
-    if ! iptables -C FORWARD -o eth0 -j DROP \
-    || ! iptables -C FORWARD -i eth0 -j DROP ; then
-        echo "Error: Firewall rule(s) not enabled!"
-        exit 1
-    fi
+    for i in 1 2 3; do
+        if iptables -C FORWARD -o eth0 -j DROP \
+        && iptables -C FORWARD -i eth0 -j DROP ; then
+            exit 0
+        elif [ $i = 3 ]; then
+            echo "Error: Firewall rule(s) not enabled!"
+            exit 1
+        fi
+        sleep 2s
+    done
 ;;
 
 --post-stop)

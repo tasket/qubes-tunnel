@@ -6,16 +6,14 @@ This is closely based on the [Qubes-vpn-support](https://github.com/tasket/Qubes
 
 To help test qubes-tunnel for eventual release in Qubes, start with installation into a Debian 9 or Fedora 26 template:
 
-Steps are similar to Qubes-vpn-support, but names/paths are different:
-
 #### Installation:
 
 1. Copy qubes-tunnel to template:
-```
-user@someqube:~$ git clone https://github.com/tasket/qubes-tunnel.git
-```
+   ```
+   user@someqube:~$ git clone https://github.com/tasket/qubes-tunnel.git
+   ```
 
-Optionally, see [Verifying Tags](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work) to verify signatures.
+   Optionally, see [Verifying Tags](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work) to verify signatures.
 
 2. Then copy to template VM:
    ```
@@ -27,6 +25,9 @@ Optionally, see [Verifying Tags](https://git-scm.com/book/en/v2/Git-Tools-Signin
 Then shutdown template.
 
 #### Setup (abbreviated):
+
+Steps are similar to Qubes-vpn-support, but names/paths are different:
+
 1. Create a proxyVM (appVM with 'provides network') based on above template.
 2. Enable qubes-tunnel Qubes service for the proxyVM.
 3. In the proxyVM shell run `/usr/lib/qubes/qtunnel-setup --config`
@@ -34,4 +35,8 @@ Then shutdown template.
 5. Link config `cd /rw/config/qtunnel; ln -s myconfig.ovpn qtunnel.conf`
 6. Restart proxyVM
 
-A full text of the setup process [is here.](https://github.com/tasket/qubes-doc/blob/tunnel/configuration/vpn.md#set-up-a-proxyvm-as-a-vpn-gateway-using-the-qubes-tunnel-service)
+   A full text of the setup process [is here.](https://github.com/tasket/qubes-doc/blob/tunnel/configuration/vpn.md#set-up-a-proxyvm-as-a-vpn-gateway-using-the-qubes-tunnel-service)
+
+Discussion thread re: testing...
+https://groups.google.com/d/msgid/qubes-users/ee24f104-efbc-23f7-aca3-6be86104ddaf%40posteo.net
+

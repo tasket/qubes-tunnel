@@ -57,8 +57,10 @@ iptables -L QBS-FORWARD || correct_ips
 
 
 ###-------------------------------------------------------------------###
-# This section executed only if plain qubes-tunnel service is active:
-[ -e /var/run/qubes-service/qubes-tunnel ] || exit 0
+# This section executed only if a qubes-tunnel* service is active:
+if ! ls /var/run/qubes-service/qubes-tunnel* 1> /dev/null 2>&1; then
+    exit 0
+fi
 
 # Prevent accidental communications from within VPN VM to net;
 # The gid-owner rule requires net programs be run with group ID 'qtunnel'

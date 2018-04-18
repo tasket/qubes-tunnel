@@ -54,6 +54,14 @@ case "$1" in
     elif [ ! -f $tmppath ]; then
         cp -a $qtunpath/$upfile $tmppath.tmp
         mv $tmppath.tmp $tmppath
+        if [ -e /var/run/qubes-service/vpn-handler-openvpn ]; then
+            # workaround for openvpn option parser bug:
+            # process config to override scripts.
+            grep -Ev '^[[:space:]]*(up|down)[[:space:]]+' $qtunpath/qtunnel.conf \
+                >/tmp/qtunnel.conf
+        else
+            cp -aL $qtunpath/qtunnel.conf /tmp
+        fi
         sync
 	su - -c 'notify-send "$(hostname): Ready to start link."' user
     fi

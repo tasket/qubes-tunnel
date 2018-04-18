@@ -29,7 +29,7 @@ Then shutdown template.
 Steps are similar to Qubes-vpn-support, but names/paths are different:
 
 1. Create a proxyVM (appVM with 'provides network') based on above template.
-2. Enable qubes-tunnel Qubes service for the proxyVM.
+2. Enable "qubes-tunnel-openvpn" Qubes service for the proxyVM.
 3. In the proxyVM shell run `/usr/lib/qubes/qtunnel-setup --config`
 4. Add OpenVPN config files to /rw/config/qtunnel
 5. Link config `cd /rw/config/qtunnel; ln -s myconfig.ovpn qtunnel.conf`

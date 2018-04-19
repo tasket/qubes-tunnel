@@ -52,7 +52,7 @@ case "$1" in
             -T "Tunnel Login" -e /usr/lib/qubes/qtunnel-setup --xterm'
         fi
     elif [ ! -f $tmppath ]; then
-        cp -a $qtunpath/$upfile $tmppath.tmp
+        cp -aL $qtunpath/$upfile $tmppath.tmp
         mv $tmppath.tmp $tmppath
         if [ -e /var/run/qubes-service/vpn-handler-openvpn ]; then
             # workaround for openvpn option parser bug:

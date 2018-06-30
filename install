@@ -24,6 +24,6 @@ if is_templatevm; then
     echo "Almost done..."
     echo "Next, shutdown this template then start proxyVM and run:"
     echo "sudo /usr/lib/qubes/qtunnel-setup --config"
-elif is_standalone; then
+elif is_fully_persistent; then
     /usr/lib/qubes/qtunnel-setup --config
 fi

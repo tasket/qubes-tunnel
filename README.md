@@ -40,3 +40,9 @@ Steps are similar to Qubes-vpn-support, but names/paths are different:
 Discussion thread re: testing...
 https://groups.google.com/d/msgid/qubes-users/ee24f104-efbc-23f7-aca3-6be86104ddaf%40posteo.net
 
+#### Revisions:
+
+* v1.4 rc1, July 1 2018
+
+* v1.4 beta, June 2018
+

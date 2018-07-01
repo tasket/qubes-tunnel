@@ -26,4 +26,5 @@ if is_templatevm; then
     echo "sudo /usr/lib/qubes/qtunnel-setup --config"
 elif is_fully_persistent; then
     /usr/lib/qubes/qtunnel-setup --config
+    echo "Done."
 fi

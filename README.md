@@ -4,7 +4,7 @@ Manage, run, protect VPN connections in Proxy VMs.
 
 This is closely based on the [Qubes-vpn-support](https://github.com/tasket/Qubes-vpn-support) project.
 
-To help test qubes-tunnel for eventual release in Qubes, start with installation into a Debian 9 or Fedora 26 template:
+To help test qubes-tunnel for eventual release in Qubes, start with installation into a Debian 9 or Fedora 28 template:
 
 #### Installation:
 

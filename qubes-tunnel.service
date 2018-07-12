@@ -24,7 +24,7 @@ Environment="client_opt2=--mlock --ping 10 --ping-restart 42 --connect-retry 5 3
 Environment="client_opt3=--connect-retry-max 7 --resolv-retry 15 --group qtunnel"
 Environment='client_opt4=--script-security 2 --up "/usr/lib/qubes/qtunnel-connect up" --down "/usr/lib/qubes/qtunnel-connect down"'
 Environment="client_opt5="
-Environment="auth_opt=--auth-user-pass /tmp/tunneluserpwd.txt"
+Environment="userpassword_opt=--auth-user-pass /tmp/tunneluserpwd.txt"
 
 ExecStartPre=/usr/lib/qubes/qtunnel-setup --check-firewall
 ExecStartPre=/usr/lib/qubes/qtunnel-setup --pre-start

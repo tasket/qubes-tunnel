@@ -60,7 +60,7 @@ case "$1" in
             'sleep 2s; /usr/bin/xterm \
             -T "Tunnel Login" -e /usr/lib/qubes/qtunnel-setup --xterm'
         fi
-    elif [ ! -f $tmppath ]; then
+    elif [ ! -f $tmppath ] && [ ! -f $qtunpath/no-$upfile ]; then
         cp -aL $qtunpath/$upfile $tmppath.tmp
         mv $tmppath.tmp $tmppath
     fi

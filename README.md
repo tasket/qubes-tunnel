@@ -8,7 +8,7 @@ To help test qubes-tunnel for eventual release in Qubes, start with installation
 
 #### Installation:
 
-1. Copy qubes-tunnel to template:
+1. Download qubes-tunnel from github:
    ```
    user@someqube:~$ git clone https://github.com/tasket/qubes-tunnel.git
    ```

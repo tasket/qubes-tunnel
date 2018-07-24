@@ -4,18 +4,20 @@
 ##  qtunnel-connect
 ##
 ## Handles DHCP-source DNS addresses & link notification for Qubes VPN VMs.
-## To use, set as 'up' and 'down' script with parameter in your tunnel config.
+## To use, set as 'up' and 'down' script with parameter in your VPN config.
 ##
 ## Use 'tunnel_dns' environment var as override/alternative.
 ## In openvpn config, format is: setenv tunnel_dns 'X.X.X.X  Y.Y.Y.Y [...]'
+##
+## Christopher Laprise, 2018  -  https://github.com/tasket
 
 set -e
 export PATH="$PATH:/usr/sbin:/sbin:/bin"
 nspath=/var/run/qubes/qubes-tunnel-ns
 
 case "$1" in
-up)
-    iptables -t nat -F PR-QBS
+up|test-up)
+    rm -f $nspath
     if [[ -z "$tunnel_dns" ]] ; then
         # Parses DHCP option variables to set DNS address translation:
         for optionname in ${!foreign_option_*} ; do
@@ -24,12 +26,17 @@ up)
             if [ ${fops[1]} == "DNS" ] ; then tunnel_dns="${fops[2]} $tunnel_dns" ; fi
         done
     fi
+
+;;&
+up)
     if [[ -n "$tunnel_dns" ]] ; then
         # Set DNS address translation in firewall:
         echo "$tunnel_dns " >$nspath
         echo "Using DNS servers $tunnel_dns"
         # Securely restart firewall (Qubes ver <4 only)
         iptables -L QBS-FORWARD || systemctl restart qubes-firewall
+
+        iptables -t nat -F PR-QBS
         . /var/run/qubes/qubes-ns
         q_addr=""
         for DNS in $tunnel_dns; do
@@ -43,10 +50,24 @@ up)
         su - -c 'notify-send "$(hostname): LINK UP, NO DNS!" --icon=dialog-error' user
     fi
 
-    ;;
+;;
+test-up)
+
+##  Use test-up parameter to test your basic VPN link before enabling firewall script.
+##  Do NOT use beyond testing period.
+    if [[ -z "$tunnel_dns" ]]; then echo "NO DNS ADDRESS FOUND."; exit 0; fi
+    [ -e /etc/resolv.vpnbak ] || cp -a /etc/resolv.conf /etc/resolv.vpnbak
+    rm /etc/resolv.conf
+    for DNS in $tunnel_dns; do
+        echo "nameserver $DNS" >>/etc/resolv.conf
+    done
+    /usr/lib/qubes/qubes-setup-dnat-to-ns
+    su - -c 'notify-send "$(hostname): TEST LINK IS UP." --icon=network-idle' user
+
+;;
 down)
     iptables -t nat -F PR-QBS
     su - -c 'notify-send "$(hostname): LINK IS DOWN !" --icon=dialog-error' user
 
-    ;;
+;;
 esac

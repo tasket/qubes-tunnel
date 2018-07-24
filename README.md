@@ -26,23 +26,12 @@ Then shutdown template.
 
 #### Setup (abbreviated):
 
-Steps are similar to Qubes-vpn-support, but names/paths are different:
+   A full text of the setup process [is here.](https://github.com/tasket/qubes-doc/blob/tunnel/configuration/vpn.md#set-up-a-proxyvm-as-a-vpn-gateway-using-the-qubes-tunnel-service) Steps are similar to Qubes-vpn-support, but names/paths are different.
 
-1. Create a proxyVM (appVM with 'provides network') based on above template.
-2. Enable "qubes-tunnel-openvpn" Qubes service for the proxyVM.
-3. In the proxyVM shell run `/usr/lib/qubes/qtunnel-setup --config`
-4. Add OpenVPN config files to /rw/config/qtunnel
-5. Link config `cd /rw/config/qtunnel; ln -s myconfig.ovpn qtunnel.conf`
-6. Restart proxyVM
-
-   A full text of the setup process [is here.](https://github.com/tasket/qubes-doc/blob/tunnel/configuration/vpn.md#set-up-a-proxyvm-as-a-vpn-gateway-using-the-qubes-tunnel-service)
-
-Discussion thread re: testing...
-https://groups.google.com/d/msgid/qubes-users/ee24f104-efbc-23f7-aca3-6be86104ddaf%40posteo.net
 
 #### Revisions:
 
-* v1.4 rc1, July 1 2018
+* v1.4 rc2, July 24 2018
 
 * v1.4 beta, June 2018
 

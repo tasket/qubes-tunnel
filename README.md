@@ -8,30 +8,32 @@ To help test qubes-tunnel for eventual release in Qubes, start with installation
 
 #### Installation:
 
-1. Download qubes-tunnel from github:
+1. Install 'qubes-tunnel' using `apt-get` or `dnf` in template, or download qubes-tunnel from github and copy to template:
    ```
-   user@someqube:~$ git clone https://github.com/tasket/qubes-tunnel.git
-   ```
-
-   Optionally, see [Verifying Tags](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work) to verify signatures.
-
-2. Then copy to template VM:
-   ```
-   user@someqube:~$ qvm-copy qubes-tunnel
+   git clone https://github.com/tasket/qubes-tunnel.git
+   qvm-copy qubes-tunnel
    ```
 
-3. In a template shell, cd to the qubes-tunnel dir and run `sudo bash ./install`. Also install openvpn if necessary.
+   Optionally, see [Verifying Tags](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work) to verify git signatures.
 
-Then shutdown template.
+2. Install 'openvpn' in template, if needed.
 
-#### Setup (abbreviated):
+3. If you downloaded the github project, open a template shell then:
+   ```
+   cd qubes-tunnel
+   sudo make install
+   ```
 
-   A full text of the setup process [is here.](https://github.com/tasket/qubes-doc/blob/tunnel/configuration/vpn.md#set-up-a-proxyvm-as-a-vpn-gateway-using-the-qubes-tunnel-service) Steps are similar to Qubes-vpn-support, but names/paths are different.
+4. Shutdown template.
+
+#### Setup
+
+   A full text of the setup process [is here.](https://github.com/tasket/qubes-doc/blob/tunnel/configuration/vpn.md#set-up-a-proxyvm-as-a-vpn-gateway-using-the-qubes-tunnel-service)
 
 
 #### Revisions:
 
-* v1.4 rc2, July 24 2018
+* v1.4.0, September 2018
 
 * v1.4 beta, June 2018
 

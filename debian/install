@@ -1,0 +1,6 @@
+qtunnel-setup usr/lib/qubes
+qtunnel-connect usr/lib/qubes
+tunnel-restrict-firewall usr/lib/qubes
+qubes-tunnel.service lib/systemd/system
+00_generic.example lib/systemd/system/qubes-tunnel.service.d
+10_wg.example lib/systemd/system/qubes-tunnel.service.d

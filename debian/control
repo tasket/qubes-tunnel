@@ -1,0 +1,15 @@
+Source: qubes-tunnel
+Section: admin
+Priority: optional
+Maintainer: Christopher Laprise <tasket@protonmail.com>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 4.1.2
+Homepage: https://www.qubes-os.org
+
+Package: qubes-tunnel
+Architecture: all
+Depends: ${misc:Depends} qubes-core-agent-networking iptables
+Description: Failsafe tunnel service for OpenVPN, etc.
+ Qubes service for ProxyVMs as secure VPN tunnel gateways. Combines anti-leak
+ firewall, DNS and systemd service that accepts config files from your
+ VPN provider.

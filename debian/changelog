@@ -1,0 +1,5 @@
+qubes-tunnel (1.4.0-1) unstable; urgency=medium
+
+  * Initial release (Closes: #3503)
+
+ -- Christopher Laprise <tasket@protonmail.com>  Sun, 16 Sep 2018 23:01:15 -0400

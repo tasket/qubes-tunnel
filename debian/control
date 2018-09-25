@@ -9,7 +9,7 @@ Homepage: https://www.qubes-os.org
 Package: qubes-tunnel
 Architecture: all
 Depends: ${misc:Depends} qubes-core-agent-networking iptables
-Description: Failsafe tunnel service for OpenVPN, etc.
+Description: Qubes service for simple, secure VPN tunnels.
  Qubes service for ProxyVMs as secure VPN tunnel gateways. Combines anti-leak
  firewall, DNS and systemd service that accepts config files from your
  VPN provider.

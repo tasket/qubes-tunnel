@@ -13,6 +13,11 @@
 # package maintainers to append LDFLAGS
 #export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 
+override_dh_auto_build:
+	true
+
+override_dh_auto_install:
+	make install-files DESTDIR=debian/tmp
 
 %:
 	dh $@

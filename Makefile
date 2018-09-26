@@ -24,6 +24,6 @@ rpmbuild:
 	install -d $(DESTDIR)/lib/systemd/system
 	install -D qubes-tunnel.service $(DESTDIR)/lib/systemd/system/qubes-tunnel.service
 	install -d $(DESTDIR)/lib/systemd/system/qubes-tunnel.service.d
-	install -D 00_generic.example $(DESTDIR)/lib/systemd/system/qubes-tunnel.service.d/00_$
-	install -D 10_wg.example  $(DESTDIR)/lib/systemd/system/qubes-tunnel.service.d/10_wg.e$
+	install -D 00_generic.example $(DESTDIR)/lib/systemd/system/qubes-tunnel.service.d/00_generic.example
+	install -D 10_wg.example  $(DESTDIR)/lib/systemd/system/qubes-tunnel.service.d/10_wg.example
 

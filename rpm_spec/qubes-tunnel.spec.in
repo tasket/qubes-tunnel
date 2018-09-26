@@ -23,7 +23,7 @@ VPN provider.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make rpmbuild DESTDIR=$RPM_BUILD_ROOT
+make install-files DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT

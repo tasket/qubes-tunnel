@@ -23,10 +23,27 @@ VPN provider.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make install-vm DESTDIR=$RPM_BUILD_ROOT
+make rpmbuild DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+groupadd -rf qtunnel
+systemctl daemon-reload
+systemctl enable qubes-tunnel.service
+
+%preun
+systemctl stop qubes-tunnel.service >/dev/null 2>&1
+systemctl disable qubes-tunnel.service
+systemctl daemon-reload
+
 %files
+%attr(744,root,root) /usr/lib/qubes/qtunnel-setup
+%attr(744,root,root) /usr/lib/qubes/qtunnel-connect
+%attr(744,root,root) /usr/lib/qubes/tunnel-restrict-firewall
+/lib/systemd/system/qubes-tunnel.service
+/lib/systemd/system/qubes-tunnel.service.d/
+/lib/systemd/system/qubes-tunnel.service.d/00_generic.example
+/lib/systemd/system/qubes-tunnel.service.d/10_wg.example
 

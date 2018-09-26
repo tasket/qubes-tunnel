@@ -1,5 +1,5 @@
 Name:	qubes-tunnel
-Version:	1.4.0
+Version:	@VERSION@
 Release:	1%{?dist}
 Summary:	Qubes service for simple, secure VPN tunnels.
 
@@ -39,11 +39,10 @@ systemctl disable qubes-tunnel.service
 systemctl daemon-reload
 
 %files
-%attr(744,root,root) /usr/lib/qubes/qtunnel-setup
-%attr(744,root,root) /usr/lib/qubes/qtunnel-connect
-%attr(744,root,root) /usr/lib/qubes/tunnel-restrict-firewall
+/usr/lib/qubes/qtunnel-setup
+/usr/lib/qubes/qtunnel-connect
+/usr/lib/qubes/tunnel-restrict-firewall
 /lib/systemd/system/qubes-tunnel.service
 /lib/systemd/system/qubes-tunnel.service.d/
 /lib/systemd/system/qubes-tunnel.service.d/00_generic.example
 /lib/systemd/system/qubes-tunnel.service.d/10_wg.example
-

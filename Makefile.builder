@@ -1,2 +1,5 @@
-RPM_SPEC_FILES = rpm_spec/qubes-tunnel.spec
-DEBIAN_BUILD_DIRS = debian
+RPM_SPEC_FILES.vm = rpm_spec/qubes-tunnel.spec
+DEBIAN_BUILD_DIRS.vm = debian
+
+RPM_SPEC_FILES = $(RPM_SPEC_FILES.$(PACKAGE_SET))
+DEBIAN_BUILD_DIRS = $(DEBIAN_BUILD_DIRS.$(PACKAGE_SET))

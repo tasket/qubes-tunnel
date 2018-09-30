@@ -21,8 +21,6 @@ set -e
 case "$1" in
     configure)
         groupadd -rf qtunnel
-        systemctl daemon-reload
-        systemctl enable qubes-tunnel.service
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
